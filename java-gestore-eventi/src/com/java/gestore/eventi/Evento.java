@@ -9,10 +9,10 @@ public class Evento {
     private int postiTotali;
     private int postiPrenotati;
     private LocalDate dataLocal;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    
 
     
-    
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
     public Evento(String titolo, String dataString, int postiTotali) {
         
@@ -35,7 +35,8 @@ public class Evento {
                 this.dataLocal = dataConvertita;
                 this.postiTotali = postiTotali;
                 this.postiPrenotati = 0;
-
+                
+                
             } catch (IllegalArgumentException e){
                 System.err.println("errore : " + e);
             }
@@ -43,7 +44,13 @@ public class Evento {
         
         }
 
-
+          
+    @Override
+    // override del tostring con formattazione giusta
+    public String toString() {
+        return "Evento: " + titolo + " in data " + dataLocal.format(formatter) + 
+               " (Posti totali: " + postiTotali + ", Prenotati: " + postiPrenotati + ")";
+    }
 
 
 
@@ -85,7 +92,6 @@ public class Evento {
         }
     }
     
-
 
     
     }   
