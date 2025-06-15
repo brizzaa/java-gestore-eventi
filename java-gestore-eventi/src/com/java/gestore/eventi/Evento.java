@@ -6,21 +6,26 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Evento {
-
+    
     private String titolo;
     private int postiTotali;
     private int postiPrenotati;
-    private int postiDisponibili = getPostiDisponibili();
     private LocalDate dataLocal;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    
+    public int getPostiDisponibili(){
+        return this.postiTotali - this.postiPrenotati;
+    }
 
-    public Evento(){};
+    public Evento(){
+
+    };
+
     public Evento(String titolo, String dataString, int postiTotali) {
-
+        
         try {
             // creo formatter per la data
             LocalDate dataConvertita = LocalDate.parse(dataString, formatter);
-            //
             // controllo se la data è prima di oggi e lancio eccezione
             if (dataConvertita.isBefore(LocalDate.now())) {
                 throw new IllegalArgumentException("data evento già passata");
@@ -28,7 +33,6 @@ public class Evento {
             // stessa cosa per i posti
             if (postiTotali <= 0) {
                 throw new IllegalArgumentException("il numero dei posti è negativo");
-
             }
             // se superano i controlli assegno le variabili all istanza
             this.titolo = titolo;
@@ -37,7 +41,7 @@ public class Evento {
             this.postiPrenotati = 0;
 
         } catch (IllegalArgumentException e) {
-            System.err.println("errore : " + e);
+            System.err.println("errore : " + e.getMessage());
         }
         
     }
@@ -80,10 +84,6 @@ public class Evento {
     public void setPostiPrenotati(int postiPrenotati) {
         this.postiPrenotati = postiPrenotati;
     }
-
-    public int getPostiDisponibili(){
-        return this.postiTotali - this.postiPrenotati;
-    }
     
     public LocalDate getDataLocal() {
         return dataLocal;
@@ -102,37 +102,44 @@ public class Evento {
     }
 
     // funzione per prenotare
-    public void prenota(Evento evento) {
+    public void prenota() {
         try {
+            this.postiPrenotati++;
             if (this.dataLocal.isBefore(LocalDate.now())) {
                 throw new IllegalArgumentException("errore: data prenotazione passata");
-            } else if (postiDisponibili <= 0) {
+            } else if (this.getPostiDisponibili() <= 0) {
                 throw new IllegalArgumentException("errore : non ci sono posti disponibili");
             }
-            this.postiPrenotati++;
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage() + ", riprova!");
         }
     }
-
     // metodo per disdire 
-    public void disdici(Evento evento) {
+    public void disdici() {
         try {
+            this.postiPrenotati--;
             if (this.dataLocal.isBefore(LocalDate.now())) {
                 throw new IllegalArgumentException("errore: data prenotazione passata");
-            } else if (this.postiDisponibili <= 0) {
+            } else if (this.getPostiDisponibili() <= 0) {
                 throw new IllegalArgumentException("errore : 0 posti ");
             }
-            this.postiPrenotati--;
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage() + ", riprova!");
         }
     }
 
+
+     public static DateTimeFormatter getFormatter() {
+        return formatter;
+    }
+    
     // override del tostring con formattazione giusta
     @Override
     public String toString() {
-        return "Evento: " + titolo + " in data " + dataLocal.format(formatter) +
-                " (Posti totali: " + postiTotali + ", Prenotati: " + postiPrenotati + ", Disponibili: " + postiDisponibili + ")";
+    return "Evento: " + this.titolo + " in data " + dataLocal.format(formatter) +
+        " (Posti totali: " + this.postiTotali + ", Prenotati: " + this.postiPrenotati + ", Disponibili: " + this.getPostiDisponibili() + ")";
     }
+
+
+    
 }
