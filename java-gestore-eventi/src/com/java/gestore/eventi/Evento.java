@@ -6,23 +6,23 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Evento {
-    
+
     private String titolo;
     private int postiTotali;
     private int postiPrenotati;
     private LocalDate dataLocal;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    
-    public int getPostiDisponibili(){
+
+    public int getPostiDisponibili() {
         return this.postiTotali - this.postiPrenotati;
     }
 
-    public Evento(){
+    public Evento() {
 
     };
 
     public Evento(String titolo, String dataString, int postiTotali) {
-        
+
         try {
             // creo formatter per la data
             LocalDate dataConvertita = LocalDate.parse(dataString, formatter);
@@ -43,7 +43,7 @@ public class Evento {
         } catch (IllegalArgumentException e) {
             System.err.println("errore : " + e.getMessage());
         }
-        
+
     }
 
     public String getTitolo() {
@@ -56,7 +56,7 @@ public class Evento {
             if (titolo == null) {
                 throw new IllegalArgumentException();
             }
-            
+
         } catch (IllegalArgumentException e) {
             System.err.println("il titolo non puo essere nullo");
         }
@@ -84,7 +84,7 @@ public class Evento {
     public void setPostiPrenotati(int postiPrenotati) {
         this.postiPrenotati = postiPrenotati;
     }
-    
+
     public LocalDate getDataLocal() {
         return dataLocal;
     }
@@ -97,49 +97,47 @@ public class Evento {
                 throw new DateTimeException("");
             }
         } catch (DateTimeException e) {
-            System.err.println("errore nella modifica della data, riprova!");
+            System.err.println("errore nella modifica della data, riprova! " + e.getMessage());
         }
     }
 
     // funzione per prenotare
     public void prenota() {
         try {
-            this.postiPrenotati++;
             if (this.dataLocal.isBefore(LocalDate.now())) {
                 throw new IllegalArgumentException("errore: data prenotazione passata");
             } else if (this.getPostiDisponibili() <= 0) {
                 throw new IllegalArgumentException("errore : non ci sono posti disponibili");
             }
+            this.postiPrenotati++;
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage() + ", riprova!");
         }
     }
-    // metodo per disdire 
+
+    // metodo per disdire
     public void disdici() {
         try {
-            this.postiPrenotati--;
             if (this.dataLocal.isBefore(LocalDate.now())) {
                 throw new IllegalArgumentException("errore: data prenotazione passata");
             } else if (this.getPostiDisponibili() <= 0) {
                 throw new IllegalArgumentException("errore : 0 posti ");
             }
+            this.postiPrenotati--;
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage() + ", riprova!");
         }
     }
 
-
-     public static DateTimeFormatter getFormatter() {
+    public static DateTimeFormatter getFormatter() {
         return formatter;
     }
-    
+
     // override del tostring con formattazione giusta
     @Override
     public String toString() {
-    return "Evento: " + this.titolo + " in data " + dataLocal.format(formatter) +
-        " (Posti totali: " + this.postiTotali + ", Prenotati: " + this.postiPrenotati + ", Disponibili: " + this.getPostiDisponibili() + ")";
+        return "Evento: " + this.titolo + " in data " + dataLocal.format(formatter) +
+                " (Posti totali: " + this.postiTotali + ", Prenotati: " + this.postiPrenotati + ", Disponibili: "
+                + this.getPostiDisponibili() + ")";
     }
-
-
-    
 }

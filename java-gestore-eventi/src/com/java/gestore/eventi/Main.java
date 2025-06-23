@@ -1,9 +1,6 @@
 package com.java.gestore.eventi;
-
 import java.util.Scanner;
-
 import javax.xml.transform.stream.StreamSource;
-
 public class Main {
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
@@ -35,7 +32,9 @@ public class Main {
             System.out.println("Recap: " + evento.toString());
         } catch (Exception e) {
             System.err.println("errore nella creazione dell'evento: " + e.getMessage());
-        }    
-        s.close();
+        } finally{
+            s.close();
+        }
+            
     }
 }
