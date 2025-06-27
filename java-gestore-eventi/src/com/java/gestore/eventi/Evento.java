@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Evento {
-
+    
     private String titolo;
     private int postiTotali;
     private int postiPrenotati;
