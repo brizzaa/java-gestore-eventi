@@ -30,8 +30,7 @@ public class ProgrammaEventi {
         }
         return eventiInData;
     }
-
-
+    
     public void svuotaEvento(Evento evento){
 
     }
